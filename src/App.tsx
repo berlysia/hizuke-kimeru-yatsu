@@ -113,36 +113,52 @@ function App() {
   return (
     <DatesProvider settings={{ locale: 'ja', firstDayOfWeek: 1 }}>
       <div>
-        <label>
-          基準日
-          <DateInput
-            value={parseYYYYMMDD(state.startDate)}
-            valueFormat="YYYY-MM-DD"
-            onChange={(startDate) =>
-              startDate &&
+        <div>
+          <label>
+            基準日
+            <DateInput
+              value={parseYYYYMMDD(state.startDate)}
+              valueFormat="YYYY-MM-DD"
+              onChange={(startDate) =>
+                startDate &&
+                update((prev) => ({
+                  ...prev,
+                  startDate: serializeYYYYMMDD(startDate),
+                }))
+              }
+            />
+          </label>
+          <button
+            type="button"
+            onClick={() =>
               update((prev) => ({
                 ...prev,
-                startDate: serializeYYYYMMDD(startDate),
+                startDate: serializeYYYYMMDD(new Date()),
               }))
             }
-          />
-        </label>
+          >
+            今日にする
+          </button>
+        </div>
 
-        <button
-          type="button"
-          onClick={() =>
-            update((prev) => ({
-              ...prev,
-              milestones: prev.milestones.toSpliced(0, 0, {
-                id: Date.now().toString(16) + '$' + Math.random().toString(16),
-                name: '',
-                durationDaysFromPreviousOne: 0,
-              }),
-            }))
-          }
-        >
-          先頭に追加
-        </button>
+        <div>
+          <button
+            type="button"
+            onClick={() =>
+              update((prev) => ({
+                ...prev,
+                milestones: prev.milestones.toSpliced(0, 0, {
+                  id:
+                    Date.now().toString(16) + '$' + Math.random().toString(16),
+                  name: '',
+                  durationDaysFromPreviousOne: 0,
+                }),
+              }))
+            }
+          >
+            先頭に追加
+          </button>
+        </div>
         {state.milestones.map((m, index) => (
           <div key={m.id}>
             {index > 0 ? (
